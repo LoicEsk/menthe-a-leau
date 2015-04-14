@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: Menthe à l'eau
-Plugin URI: http://loiclaurent.com/menthe-a-leau
+Plugin Name: menthe-a-leau
+Plugin URI: https://github.com/LoicEsk/menthe-a-leau
 Description: A plugin to analayse plants datas
 Version: 1.0
 Author: Loïc Laurent
