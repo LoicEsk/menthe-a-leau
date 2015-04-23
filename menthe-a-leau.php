@@ -3,7 +3,7 @@
 Plugin Name: menthe-a-leau
 Plugin URI: https://github.com/LoicEsk/menthe-a-leau
 Description: A plugin to analayse plants datas
-Version: 0.1.1
+Version: 0.1.2
 Author: Loïc Laurent
 Author URI: http://loiclaurent.com
 License: GPLv2 or later
