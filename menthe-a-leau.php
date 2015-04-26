@@ -35,13 +35,24 @@ function menthe_getData() {
 	wp_die(); // this is required to terminate immediately and return a proper response
 }
 
-add_action( 'wp_ajax nopriv_menthe_setData', 'menthe_setData' ); // hook d'enregistrement
+add_action( 'wp_ajax_nopriv_menthe_setData', 'menthe_setData' ); // hook d'enregistrement
 function menthe_setData() {
-	$date = 'NOW';
-	$nom = $_POST['nom'];
+	global $menthe_table;
+	global $wpdb;
+
+	$date = date('Y-m-d H:i:s', time());
+	$nom = $_POST['donnee'];
 	$valeur = $_POST['valeur'];
 
-	echo('Requete reue');
+	$wpdb->query( $wpdb->prepare( 
+		"INSERT INTO $menthe_table VALUES ( '', %s, %s, %s )", 
+		$date,
+		$nom, 
+		$valeur 
+	));
+
+	echo('La requete : ');
+	printf("INSERT INTO $menthe_table VALUES ( '', %s, %s, %s )", $date, $nom, $valeur );
 
 	wp_die();
 }
