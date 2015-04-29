@@ -2,7 +2,7 @@
 
 
 // valeurs par défaut
-dataConfig = {
+var dataConfig = {
     serialID: 'com3',/* "/dev/ttyACM0" */
     baudrate: 9600,
     dataFolder: __dirname
@@ -14,18 +14,18 @@ console.log('Chargement de la config');
 var fs = require('fs');
 var file = __dirname + '/config.json';
 
-fs.readFile(file, 'utf8', function (err, dataTxt) {
-	 if (err) {
-		console.log('Erreur de lecture de configuration');
-		console.log('Err : ' + err);
-		console.log('chargement de la config par défaut');
-		return;
-	 }
-  	// données reçues
-  	dataConfig = extend(dataConfig, JSON.parse(dataTxt));
-});
+var dataRead = fs.readFileSync(file, 'utf8');
+if(dataRead.length > 0){
+	// données reçues
+	//dataConfig = JSON.parse(dataRead);
+	dataConfig = dataRead;
+	console.log('config :');
+	console.log(dataConfig);
+}
+
 
 function get(data){
+	console.log('config[' + data + '] -> ' + dataConfig[data]);
 	return dataConfig[data];
 }
 function set(data, value){

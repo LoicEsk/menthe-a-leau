@@ -20,7 +20,7 @@ function PostCode() {
   var post_options = {
       host: 'localhost',
       port: '80',
-      path: '/home/wp-admin/admin-ajax.php',
+      path: '/wp-admin/admin-ajax.php',
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

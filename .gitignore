@@ -26,6 +26,9 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-    Status API Training Shop Blog About 
+#datas
+*.csv
 
-    © 2015 GitHub, Inc. Ter
+# config node
+*/config.json
+

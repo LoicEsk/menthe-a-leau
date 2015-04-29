@@ -25,7 +25,6 @@ serial.open(function (error) {
     console.log('Affiche du flux de données :');
 
     serial.on('data', function(data) {
-      io.emit('serial', data);// envois des données brut
 
       bufferSerial += data;
 

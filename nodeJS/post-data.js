@@ -1,3 +1,5 @@
+
+
 /*
 	MENTHE A L'EAU
 
@@ -10,6 +12,8 @@
 console.log('Serial logger');
 
 var fs = require('fs');
+var querystring = require('querystring');
+var http = require('http');
 var SerialPort = require("serialport").SerialPort;
 var serial = new SerialPort("/dev/ttyACM0", {
   baudrate: 9600
@@ -25,7 +29,6 @@ serial.open(function (error) {
     console.log('Affiche du flux de données :');
 
     serial.on('data', function(data) {
-      io.emit('serial', data);// envois des données brut
 
       bufferSerial += data;
 
@@ -53,6 +56,7 @@ serial.open(function (error) {
           console.log('%s : %s = %s', dateFormat, decomposition[0], decomposition[1]);
           
           // envois HTTP POST
+	  console.log('Envoi de la donnee %s = %s', decomposition[0], decomposition[1]);
           postData(decomposition[0], decomposition[1]);
 
         };
@@ -81,7 +85,7 @@ res.header('content-type','text/csv');
 res.header('content-disposition', 'attachment; filename=report.csv');
 */
 
-function postData(donne, valeur){
+function postData(donnee, valeur){
   // Build the post string from an object
   var post_data = querystring.stringify({
     'action': 'menthe_setData',
@@ -93,7 +97,7 @@ function postData(donne, valeur){
   var post_options = {
       host: 'localhost',
       port: '80',
-      path: '/home/wp-admin/admin-ajax.php',
+      path: '/wp-admin/admin-ajax.php',
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
