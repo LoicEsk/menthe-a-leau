@@ -12,8 +12,6 @@
 console.log('Serial logger');
 
 var fs = require('fs');
-var querystring = require('querystring');
-var http = require('http');
 var SerialPort = require("serialport").SerialPort;
 var serial = new SerialPort("/dev/ttyACM0", {
   baudrate: 9600
@@ -86,6 +84,9 @@ res.header('content-disposition', 'attachment; filename=report.csv');
 */
 
 function postData(donnee, valeur){
+	var querystring = require('querystring');
+	var http = require('http');
+
   // Build the post string from an object
   var post_data = querystring.stringify({
     'action': 'menthe_setData',
@@ -112,6 +113,9 @@ function postData(donnee, valeur){
           console.log('Response: ' + chunk);
       });
   });
+post_req.on('error', function(e) {
+  console.log('problem with request: ' + e.message);
+});
 
   // post the data
   post_req.write(post_data);
