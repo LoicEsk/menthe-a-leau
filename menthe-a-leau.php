@@ -23,14 +23,13 @@ $menthe_table = $wpdb->prefix . 'data_menthe';
 add_action( 'wp_ajax_menthe_getData', 'menthe_getData' ); // hook pour l'admin
 function menthe_getData() {
 	global $wpdb; // this is how you get access to the database
+	global $menthe_table;
 
 	$fromDate = $_POST['fromDate'];
 	$toDate = $_POST['toDate'];
 
-	echo('Recu : ');
-    echo $fromDate;
-    echo(' -> ');
-    echo($toDate);
+	$resultats = $wpdb->get_results( "SELECT * FROM $menthe_table" );
+	echo(json_encode($resultats));
 
 	wp_die(); // this is required to terminate immediately and return a proper response
 }

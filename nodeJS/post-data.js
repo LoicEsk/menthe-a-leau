@@ -113,9 +113,9 @@ function postData(donnee, valeur){
           console.log('Response: ' + chunk);
       });
   });
-post_req.on('error', function(e) {
-  console.log('problem with request: ' + e.message);
-});
+  post_req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
 
   // post the data
   post_req.write(post_data);
