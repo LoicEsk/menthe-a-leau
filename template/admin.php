@@ -25,15 +25,7 @@
 				<h3 class="hndle">Graph</h3>
 				<div class="inside">
 					<div id="ajaxOut">
-						<?php
-							$resultats = $wpdb->get_results( "SELECT * FROM $menthe_table" );
-							/*foreach($resultats as $entry){
-								echo('<div>');
-								print(json_encode($entry));
-								echo('</div>');
-							}*/
-							echo(json_encode($resultats));
-						?>
+						
 					</div>
 				</div>
 			</div>

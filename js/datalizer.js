@@ -24,7 +24,13 @@ jQuery(document).ready(function($) {
   		// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
   		$.post(ajaxurl, data, function(response) {
   			console.log('Got this from the server: ' + response);
-        console.print_r(response);
+        var dataObj = $.parseJSON(response);
+        
+        // affiche les données brutes
+        for(var i in dataObj){
+          var dataHTML = '<div>' + dataObj[i].time + ' > ' + dataObj[i].nom + ' = ' + dataObj[i].valeur + '</div>';
+          $('#ajaxOut').prepend(dataHTML); 
+        }
   		});
     }
 
