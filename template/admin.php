@@ -16,7 +16,7 @@
 				<ul>
 					<li>Version bdd : <strong><?php echo($menth_db_version); ?></strong></li>
 					<li>Nom de la table : <strong><?php echo($menthe_table); ?></strong></li>
-					<li>Nombre d'entrée : <strong><?php echo($compte); ?></strong></li>
+					<li>Nombre d'entrées : <strong><?php echo($compte); ?></strong></li>
 				</ul>
 			</div>
 		</div>
@@ -24,8 +24,9 @@
 		<div class="postbox">
 				<h3 class="hndle">Graph</h3>
 				<div class="inside">
-					<div id="ajaxOut">
-						
+					<div id="visuel">
+						<canvas id="graph" width="100%"></canvas>
+						<div id="ajaxOut"></div>
 					</div>
 				</div>
 			</div>
