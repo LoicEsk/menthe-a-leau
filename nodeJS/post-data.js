@@ -54,7 +54,7 @@ serial.open(function (error) {
           console.log('%s : %s = %s', dateFormat, decomposition[0], decomposition[1]);
           
           // envois HTTP POST
-	  console.log('Envoi de la donnee %s = %s', decomposition[0], decomposition[1]);
+	  //console.log('Envoi de la donnee %s = %s', decomposition[0], decomposition[1]);
           postData(decomposition[0], decomposition[1]);
 
         };
@@ -110,7 +110,7 @@ function postData(donnee, valeur){
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
+          //console.log('Response: ' + chunk);
       });
   });
   post_req.on('error', function(e) {
