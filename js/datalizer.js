@@ -12,20 +12,25 @@ var dataStorage = {
 jQuery(document).ready(function($) {
     
 
-    if(document.getElementById('ajaxOut')){
+    if(document.getElementById('datalizer')){
       
       // dimensionement du canvas
       /*$('#graph').width($('#ajaxOut').width());
       $('#graph').height($('#graph').width() * 1/2);*/
-
+      
       var dateNow = new Date();
       var time1an = 1000 * 60 * 60 * 24 * 365;
-      var time1mois = 1000 * 60 * 60 * 24 * 30; // pour les tests avec moins de valeurs
-      var fromTime = dateNow.getTime() - time1mois;
+      //var time1mois = 1000 * 60 * 60 * 24 * 30; // pour les tests avec moins de valeurs
+      var fromTime = dateNow.getTime() - time1an;
       var fromDate = new Date(fromTime);
       
       dataStorage.fromDate = fromDate;
       dataStorage.toDate = dateNow;
+      
+      getData();
+    }
+    
+    function getData(){
 
     	var data = {
   			'action': 'menthe_getData',
@@ -40,10 +45,12 @@ jQuery(document).ready(function($) {
   			console.log('Got this from the server: ' + response);
         var dataObj = $.parseJSON(response);
         
+        
+        
         // affiche les données brutes
         for(var i in dataObj){
-          var dataHTML = '<div>' + dataObj[i].time + ' > ' + dataObj[i].nom + ' = ' + dataObj[i].valeur + '</div>';
-          $('#ajaxOut').prepend(dataHTML); 
+          /*var dataHTML = '<div>' + dataObj[i].time + ' > ' + dataObj[i].nom + ' = ' + dataObj[i].valeur + '</div>';
+          $('#ajaxOut').prepend(dataHTML);*/ 
           
           // archivage de la donnée
           //dataStorage.data.push(dataObj);
@@ -59,19 +66,29 @@ jQuery(document).ready(function($) {
 //          console.log(dataTps);
           dataStorage.data[nom].push(dataTps);
         }
-        cleanData();
+        analyseData();
         drawGraph();
   		});
     }
 
-    function cleanData(){
+    function analyseData(){
       // nettoyage des doublons
       // tri des données par ordre chronologique
+      
+      // affichage du tableau de bord
+      var zoneDom = $("#ajaxOut");
+      zoneDom.html();
+      for(var nom in dataStorage.data){
+        var derValeur = dataStorage.data[nom][dataStorage.data[nom].length -1].valeur;
+        var elem = $('<div/>').html('<span class="etiquette">' + nom + ' :</span> ' + derValeur);
+        zoneDom.append(elem);
+      }
+      
     }
     
     $(window).on('resize', function() {
         var canvas = document.getElementById("graph");
-        var largeur = $('#visuel').width();
+        var largeur = $('#datalizer').width();
         var hauteur = largeur * 1 / 2;
         canvas.height = hauteur;
         canvas.width = largeur;
@@ -95,16 +112,15 @@ jQuery(document).ready(function($) {
       var echelleX = largeur / nbMin;
       var echelleY = hauteur / 100; // de 0 à 100 en vertical
       
-      console.log('Echelles :');
-      console.log('%d min sur %d px -> coeff = %d', nbMin, largeur, echelleX);
+      //console.log('Echelles :');
+      //console.log('%d min sur %d px -> coeff = %d', nbMin, largeur, echelleX);
     
       ctx.fillStyle = "black";
       ctx.font = "12px serif";
-      ctx.fillText('Graph', 10, 10);
     
       for(nom in dataStorage.data){
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
+        //ctx.strokeStyle = 'blue';
         ctx.beginPath();
         //console.log('série %s', nom);
         for(i in dataStorage.data[nom]){

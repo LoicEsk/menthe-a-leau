@@ -24,7 +24,8 @@
 		<div class="postbox">
 				<h3 class="hndle">Graph</h3>
 				<div class="inside">
-					<div id="visuel">
+					<div id="datalizer">
+						<div class="loaderLayout">Chargement ...</div>
 						<canvas id="graph" width="100%"></canvas>
 						<div id="ajaxOut"></div>
 					</div>
