@@ -30,8 +30,20 @@ jQuery(document).ready(function($) {
       getData();
     }
     
+    $('#interval').change(function(){
+      // mise à jour des infos
+      drawGraph();
+    })
+    
     function getData(){
-
+      
+      //  récupération des dates balises
+      var interval = $("#interval").val();
+      var dateFin = $('#dateFin').val();
+      console.log('Interval = %d', interval);
+      console.log('Date de fin : %s', dateFin);
+      
+      
     	var data = {
   			'action': 'menthe_getData',
   			'fromDate' : dateToString(fromDate),
@@ -68,6 +80,7 @@ jQuery(document).ready(function($) {
         }
         analyseData();
         drawGraph();
+        $('#datalizer .loaderLayout').hide();
   		});
     }
 
@@ -99,7 +112,22 @@ jQuery(document).ready(function($) {
     function drawGraph(){
       // tracé du graph de valeurs
       
-      var startTime = new Date().getTime();
+      // récupération des infos d'affichge
+      var interval = $("#interval").val();
+      var dateFin = $('#dateFin').val();
+      console.log('Interval = %d', interval);
+      console.log('Date de fin : %s', dateFin);
+      
+      if(dateFin == "NOW"){
+        var endTime = new Date().getTime() / 60000;
+      }else{
+        var endTime = new Date().getTime() / 60000; // champs dans effet pour le moment
+      }
+      
+      var startTime = endTime - interval;
+      console.log('Time de debut : %d', startTime);
+      console.log('Time de fin : %d', endTime);
+      
       
       // récupération du contexte 2D
       var canvas = document.getElementById("graph");
@@ -108,14 +136,30 @@ jQuery(document).ready(function($) {
       // calcul des échelles
       var largeur = canvas.width;
       var hauteur = canvas.height;
-      var nbMin = (dataStorage.toDate.getTime() - dataStorage.fromDate.getTime()) / 60000;
+      var nbMin = interval;
       var echelleX = largeur / nbMin;
       var echelleY = hauteur / 100; // de 0 à 100 en vertical
       
       //console.log('Echelles :');
       //console.log('%d min sur %d px -> coeff = %d', nbMin, largeur, echelleX);
+      
+      // clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      //affichage des grilles
+      ctx.strokeStyle = '#444444';
+      ctx.fillStyle = '#444444';
+      for(var i=0; i < 100; i += 20){
+        var y = (100 - i) * echelleY;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+        ctx.fillText(i, 0, y - 1);
+      }
+      
     
-      ctx.fillStyle = "black";
+      ctx.strokeStyle = "black";
       ctx.font = "12px serif";
     
       for(nom in dataStorage.data){
@@ -123,17 +167,25 @@ jQuery(document).ready(function($) {
         //ctx.strokeStyle = 'blue';
         ctx.beginPath();
         //console.log('série %s', nom);
+        var lastTimeMin = 0;
         for(i in dataStorage.data[nom]){
-          var minutesX = (dataStorage.data[nom][i].time - dataStorage.fromDate.getTime()) / 60000;
-          //console.log(dataStorage.data[nom][i].time);
-          var x = minutesX * largeur / nbMin;
-          var y = dataStorage.data[nom][i]['valeur'] * echelleY;
-          //console.log('%s %d > %d, %d',nom, i, x, y);
-          if(i == 0){
-            ctx.fillText(nom, x, y);
-            ctx.moveTo(x, y);
+          //console.log('time valeur : %d', dataStorage.data[nom][i].time / 6000);
+          var timeMin = dataStorage.data[nom][i].time / 60000; 
+          if(timeMin >= startTime && timeMin <= endTime){
+            
+            var minutesX = timeMin - startTime;
+            console.log(timeMin);
+            var x = minutesX * largeur / nbMin;
+            var y = dataStorage.data[nom][i]['valeur'] * echelleY;
+            console.log('%s %d > %d, %d',nom, i, minutesX, y);
+            if(timeMin - lastTimeMin > 2880){
+              ctx.stroke();
+              ctx.fillText(nom, x, y);
+              ctx.moveTo(x, y);
+            }
+            else ctx.lineTo(x, y);
+            lastTimeMin = timeMin;
           }
-          else ctx.lineTo(x, y);
         }
         // fin de tracé
         ctx.stroke();
