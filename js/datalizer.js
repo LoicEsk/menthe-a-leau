@@ -174,10 +174,10 @@ jQuery(document).ready(function($) {
           if(timeMin >= startTime && timeMin <= endTime){
             
             var minutesX = timeMin - startTime;
-            console.log(timeMin);
+            //console.log(timeMin);
             var x = minutesX * largeur / nbMin;
-            var y = dataStorage.data[nom][i]['valeur'] * echelleY;
-            console.log('%s %d > %d, %d',nom, i, minutesX, y);
+            var y = hauteur - dataStorage.data[nom][i].valeur * echelleY;
+            //console.log('%s %d > %d, %d',nom, i, minutesX, y);
             if(timeMin - lastTimeMin > 2880){
               ctx.stroke();
               ctx.fillText(nom, x, y);
