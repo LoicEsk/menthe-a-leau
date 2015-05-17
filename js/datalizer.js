@@ -28,26 +28,40 @@ jQuery(document).ready(function($) {
       dataStorage.toDate = dateNow;
       
       getData();
+      
+      // refresh automatique
+      setInterval(getData(), 300000); // toutes les 5 min
     }
     
     $('#interval').change(function(){
       // mise à jour des infos
       drawGraph();
+      // mise à jour des données
+      getData();
     })
     
     function getData(){
       
-      //  récupération des dates balises
+      // récupération des infos d'affichge
       var interval = $("#interval").val();
       var dateFin = $('#dateFin').val();
       //console.log('Interval = %d', interval);
       //console.log('Date de fin : %s', dateFin);
       
+      if(dateFin == "NOW"){
+        var toDate = new Date();
+      }else{
+        var toDate = new Date(); // champs dans effet pour le moment
+      }
+      var endTime = new Date().getTime();
+      
+      var startTime = endTime - interval * 60000; 
+      var fromDate = new Date(startTime);
       
     	var data = {
   			'action': 'menthe_getData',
   			'fromDate' : dateToString(fromDate),
-  			'toDate' : dateToString(dateNow)
+  			'toDate' : dateToString(toDate)
   		};
 
       //console.log('Envoi des données : ', data);
@@ -57,15 +71,12 @@ jQuery(document).ready(function($) {
   			//console.log('Got this from the server: ' + response);
         var dataObj = $.parseJSON(response);
         
+        // suppression des anciennes données
+        dataStorage.data = [];
         
-        
-        // affiche les données brutes
         for(var i in dataObj){
-          /*var dataHTML = '<div>' + dataObj[i].time + ' > ' + dataObj[i].nom + ' = ' + dataObj[i].valeur + '</div>';
-          $('#ajaxOut').prepend(dataHTML);*/ 
-          
+
           // archivage de la donnée
-          //dataStorage.data.push(dataObj);
           var nom = dataObj[i].nom;
           var date = dateFromString(dataObj[i].time);
           var valeur = dataObj[i].valeur;
@@ -76,6 +87,15 @@ jQuery(document).ready(function($) {
             dataStorage.data[nom] = [];
           }
 //          console.log(dataTps);
+          /*var present = false;
+          for(var j in dataStorage.data[nom]){
+            if(dataStorage.data[nom][j].time == dataTps.time){
+              present = true;
+              break;
+            }
+          }
+          if(!present) dataStorage.data[nom].push(dataTps);
+          //else console.log('donnée prsente');*/
           dataStorage.data[nom].push(dataTps);
         }
         analyseData();

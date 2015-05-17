@@ -28,7 +28,7 @@ function menthe_getData() {
 	$fromDate = $_POST['fromDate'];
 	$toDate = $_POST['toDate'];
 
-	$resultats = $wpdb->get_results( "SELECT * FROM $menthe_table" );
+	$resultats = $wpdb->get_results( "SELECT * FROM $menthe_table WHERE time BETWEEN '$fromDate' AND '$toDate'" );
 	echo(json_encode($resultats));
 
 	wp_die(); // this is required to terminate immediately and return a proper response

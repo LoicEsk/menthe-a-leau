@@ -47,9 +47,9 @@
 							<select id="interval">
 							    <option value="535680">Un an</option>
 								<option value="267840">6 mois</option>
-								<option value="133920" selected="true">3 mois</option>
+								<option value="133920">3 mois</option>
 								<option value="44640">1 mois</option>
-								<option value="10080">1 semaine</option>
+								<option value="10080" selected="true">1 semaine</option>
 								<option value="1440">1 jour</option>
 							</select>
 							<input type="text" id="dateFin" value="NOW">
