@@ -183,7 +183,7 @@ jQuery(document).ready(function($) {
       ctx.strokeStyle = '#444444';
       ctx.fillStyle = '#444444';
       ctx.lineWidth = 1;
-      for(var i=0; i < 100; i += 20){
+      for(var i=0; i < 100; i += 10){
         var y = (100 - i) * echelleY;
         ctx.beginPath();
         ctx.moveTo(0, y);
