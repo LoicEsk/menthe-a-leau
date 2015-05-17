@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
       getData();
       
       // refresh automatique
-      setInterval(getData(), 300000); // toutes les 5 min
+      setInterval(getData, 300000); // toutes les 5 min
     }
     
     $('#interval').change(function(){
@@ -41,6 +41,7 @@ jQuery(document).ready(function($) {
     })
     
     function getData(){
+      $('#datalizer .loaderLayout').show();
       
       // récupération des infos d'affichge
       var interval = $("#interval").val();
