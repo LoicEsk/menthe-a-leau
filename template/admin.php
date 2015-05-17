@@ -20,14 +20,29 @@
 				</ul>
 			</div>
 		</div>
+		
+		<div class="postbox">
+			<h3 class="hndle">Configuration</h3>
+			<div class="inside">
+				<form>
+					<!-- configuration des couleurs -->
+					<ul>
+						<li>Couleurs 1</li>
+						
+					</ul>
+				</form>
+			</div>
+		</div>
 
 		<div class="postbox">
 				<h3 class="hndle">Graph</h3>
 				<div class="inside">
 					<div id="datalizer">
+						<script type="text/javascript">
+							// config
+						</script>
 						<div class="loaderLayout">Chargement ...</div>
 						<canvas id="graph" width="100%"></canvas>
-						<div id="ajaxOut"></div>
 						<form id="settings">
 							<select id="interval">
 							    <option value="535680">Un an</option>
@@ -39,6 +54,7 @@
 							</select>
 							<input type="text" id="dateFin" value="NOW">
 						</form>
+						<div id="ajaxOut"></div>
 					</div>
 				</div>
 			</div>

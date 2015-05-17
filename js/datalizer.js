@@ -40,8 +40,8 @@ jQuery(document).ready(function($) {
       //  récupération des dates balises
       var interval = $("#interval").val();
       var dateFin = $('#dateFin').val();
-      console.log('Interval = %d', interval);
-      console.log('Date de fin : %s', dateFin);
+      //console.log('Interval = %d', interval);
+      //console.log('Date de fin : %s', dateFin);
       
       
     	var data = {
@@ -50,11 +50,11 @@ jQuery(document).ready(function($) {
   			'toDate' : dateToString(dateNow)
   		};
 
-      console.log('Envoi des données : ', data);
+      //console.log('Envoi des données : ', data);
 
   		// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
   		$.post(ajaxurl, data, function(response) {
-  			console.log('Got this from the server: ' + response);
+  			//console.log('Got this from the server: ' + response);
         var dataObj = $.parseJSON(response);
         
         
@@ -97,6 +97,18 @@ jQuery(document).ready(function($) {
         zoneDom.append(elem);
       }
       
+      // selection courbes
+      var zoneSetting = $('#settings');
+      for(var nom in dataStorage.data){
+        if($('input.' + nom).length == 0){
+          var cmd = $('<div/>').html('<input class="' + nom + '" type="checkbox" checked="true">'+ nom);
+          zoneSetting.append(cmd);
+          $('#settings input.'+nom).change(function(){
+            //console.log('Changement de ' + $(this).attr('class'));
+            drawGraph();
+          })
+        }
+      }
     }
     
     $(window).on('resize', function() {
@@ -115,8 +127,8 @@ jQuery(document).ready(function($) {
       // récupération des infos d'affichge
       var interval = $("#interval").val();
       var dateFin = $('#dateFin').val();
-      console.log('Interval = %d', interval);
-      console.log('Date de fin : %s', dateFin);
+      //console.log('Interval = %d', interval);
+      //console.log('Date de fin : %s', dateFin);
       
       if(dateFin == "NOW"){
         var endTime = new Date().getTime() / 60000;
@@ -125,8 +137,8 @@ jQuery(document).ready(function($) {
       }
       
       var startTime = endTime - interval;
-      console.log('Time de debut : %d', startTime);
-      console.log('Time de fin : %d', endTime);
+      //console.log('Time de debut : %d', startTime);
+      //console.log('Time de fin : %d', endTime);
       
       
       // récupération du contexte 2D
@@ -149,6 +161,7 @@ jQuery(document).ready(function($) {
       //affichage des grilles
       ctx.strokeStyle = '#444444';
       ctx.fillStyle = '#444444';
+      ctx.lineWidth = 1;
       for(var i=0; i < 100; i += 20){
         var y = (100 - i) * echelleY;
         ctx.beginPath();
@@ -163,32 +176,35 @@ jQuery(document).ready(function($) {
       ctx.font = "12px serif";
     
       for(nom in dataStorage.data){
-        ctx.lineWidth = 2;
-        //ctx.strokeStyle = 'blue';
-        ctx.beginPath();
-        //console.log('série %s', nom);
-        var lastTimeMin = 0;
-        for(i in dataStorage.data[nom]){
-          //console.log('time valeur : %d', dataStorage.data[nom][i].time / 6000);
-          var timeMin = dataStorage.data[nom][i].time / 60000; 
-          if(timeMin >= startTime && timeMin <= endTime){
-            
-            var minutesX = timeMin - startTime;
-            //console.log(timeMin);
-            var x = minutesX * largeur / nbMin;
-            var y = hauteur - dataStorage.data[nom][i].valeur * echelleY;
-            //console.log('%s %d > %d, %d',nom, i, minutesX, y);
-            if(timeMin - lastTimeMin > 2880){
-              ctx.stroke();
-              ctx.fillText(nom, x, y);
-              ctx.moveTo(x, y);
+        var afficher = $('#settings input.'+nom).is(':checked');
+        if(afficher){
+          ctx.lineWidth = 2;
+          //ctx.strokeStyle = 'blue';
+          ctx.beginPath();
+          //console.log('série %s', nom);
+          var lastTimeMin = 0;
+          for(i in dataStorage.data[nom]){
+            //console.log('time valeur : %d', dataStorage.data[nom][i].time / 6000);
+            var timeMin = dataStorage.data[nom][i].time / 60000; 
+            if(timeMin >= startTime && timeMin <= endTime){
+              
+              var minutesX = timeMin - startTime;
+              //console.log(timeMin);
+              var x = minutesX * largeur / nbMin;
+              var y = hauteur - dataStorage.data[nom][i].valeur * echelleY;
+              //console.log('%s %d > %d, %d',nom, i, minutesX, y);
+              if(timeMin - lastTimeMin > 2880){
+                ctx.stroke();
+                ctx.fillText(nom, x, y);
+                ctx.moveTo(x, y);
+              }
+              else ctx.lineTo(x, y);
+              lastTimeMin = timeMin;
             }
-            else ctx.lineTo(x, y);
-            lastTimeMin = timeMin;
           }
+          // fin de tracé
+          ctx.stroke();
         }
-        // fin de tracé
-        ctx.stroke();
       }
       
     }
@@ -201,7 +217,7 @@ function dateToString(dateObj){
                   padStr(dateObj.getHours()) + ':' +
                   padStr(dateObj.getMinutes()) + ':' +
                   padStr(dateObj.getSeconds());
-    console.log (dateStr );
+    //console.log (dateStr );
     return dateStr;
 }
 function dateFromString(dateStr){
