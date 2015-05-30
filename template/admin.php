@@ -50,7 +50,7 @@
 								<option value="133920">3 mois</option>
 								<option value="44640">1 mois</option>
 								<option value="10080" selected="true">1 semaine</option>
-								<option value="1440">1 jour</option>
+								<option value="1440">24 heures</option>
 							</select>
 							<input type="text" id="dateFin" value="NOW">
 						</form>
