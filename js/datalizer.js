@@ -50,6 +50,17 @@ jQuery(document).ready(function($) {
       
       // refresh automatique
       setInterval(getData, 300000); // toutes les 5 min
+      
+      // resize
+      $(window).on('resize', function() {
+          var canvas = document.getElementById("graph");
+          var largeur = $('#datalizer').width();
+          var hauteur = largeur * 1 / 2;
+          canvas.height = hauteur;
+          canvas.width = largeur;
+          drawGraph();
+      });
+      $(window).trigger('resize');
     }
     
     $('#interval').change(function(){
@@ -151,15 +162,6 @@ jQuery(document).ready(function($) {
       }
     }
     
-    $(window).on('resize', function() {
-        var canvas = document.getElementById("graph");
-        var largeur = $('#datalizer').width();
-        var hauteur = largeur * 1 / 2;
-        canvas.height = hauteur;
-        canvas.width = largeur;
-        drawGraph();
-    });
-    $(window).trigger('resize');
     
     function drawGraph(){
       // tracé du graph de valeurs
