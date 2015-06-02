@@ -63,9 +63,13 @@ function register_menthe_admin_page() {
 }
 
 // JS pour la page admin
-add_action( 'admin_enqueue_scripts', 'menthe_js_enqueue' );
-function menthe_js_enqueue($hook) {
+add_action( 'admin_enqueue_scripts', 'datalizer_enqueue' );
+function datalizer_enqueue($hook) {
         
+	// css
+	wp_enqueue_style('datalizer-css', plugins_url( '/template/datalizer.css', __FILE__ ));
+	
+	// js
 	wp_enqueue_script( 'ajax-script', plugins_url( '/js/datalizer.js', __FILE__ ), array('jquery') );
 
 	// in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value

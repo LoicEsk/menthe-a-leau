@@ -53,6 +53,9 @@
 								<option value="1440">24 heures</option>
 							</select>
 							<input type="text" id="dateFin" value="NOW">
+							
+							<table id="dataSelect">
+							</table>
 						</form>
 						<div id="ajaxOut"></div>
 					</div>

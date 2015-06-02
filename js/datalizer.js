@@ -139,26 +139,31 @@ jQuery(document).ready(function($) {
       // nettoyage des doublons
       // tri des données par ordre chronologique
       
-      // affichage du tableau de bord
-      var zoneDom = $("#ajaxOut");
-      zoneDom.html();
-      for(var nom in dataStorage.data){
-        var derValeur = dataStorage.data[nom][dataStorage.data[nom].length -1].valeur;
-        var elem = $('<div/>').html('<span class="etiquette">' + nom + ' :</span> ' + derValeur);
-        zoneDom.append(elem);
-      }
-      
       // selection courbes
-      var zoneSetting = $('#settings');
+      var zoneSetting = $('#dataSelect');
+      var newLines = [];
       for(var nom in dataStorage.data){
         if($('input.' + nom).length == 0){
-          var cmd = $('<div/>').html('<input class="' + nom + '" type="checkbox" checked="true">'+ nom);
-          zoneSetting.append(cmd);
-          $('#settings input.'+nom).change(function(){
-            //console.log('Changement de ' + $(this).attr('class'));
-            drawGraph();
-          })
+          newLines.push(nom);
+          console.log('Nouvelle donnes "%s" trouvee', nom);
         }
+      }
+      // tri des lignes
+      newLines.sort();
+      for(var i in newLines){
+        console.log('Insertion de %s', newLines[i]);
+        var cmd = $('<tr/>').html('<th><input class="' + newLines[i] + '" type="checkbox" checked="true">'+ newLines[i] + '</th><td class="' + newLines[i] + '"></td>');
+        zoneSetting.append(cmd);
+        $('#settings input.'+newLines[i]).change(function(){
+          //console.log('Changement de ' + $(this).attr('class'));
+          drawGraph();
+        })
+      }
+      
+      // affichage du tableau de bord
+      for(var nom in dataStorage.data){
+        var derValeur = dataStorage.data[nom][dataStorage.data[nom].length -1].valeur;
+        $('td.' + nom, zoneSetting).text(derValeur);
       }
     }
     
