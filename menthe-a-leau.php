@@ -59,7 +59,7 @@ function menthe_setData() {
 // page admin
 add_action( 'admin_menu', 'register_menthe_admin_page' );
 function register_menthe_admin_page() {
-	add_menu_page( 'Menthe à l\'eau', 'Menthe à l\'eau', 'edit_pages', 'menthe-a-leau/template/admin.php', '', 'dashicons-chart-area', 30 );
+	add_menu_page( 'Datalizer', 'Datalizer', 'edit_pages', 'menthe-a-leau/template/admin.php', '', 'dashicons-chart-area', 30 );
 }
 
 // JS pour la page admin
@@ -73,12 +73,18 @@ function datalizer_enqueue($hook) {
 	wp_enqueue_script( 'ajax-script', plugins_url( '/js/datalizer.js', __FILE__ ), array('jquery') );
 
 	// in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
-	/*wp_localize_script( 'ajax-script', 'ajax_object',
-            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );*/
+	wp_localize_script( 'ajax-script', 'datalizer_vars',
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
 }
 
 // shortcode intégration
-
+function shortcode_datalizer($attr){
+	datalizer_enqueue(null);
+	ob_start();
+	include(plugin_dir_path( __FILE__ ).'template/output-datalizer.php');
+	return ob_get_clean();
+}
+add_shortcode( 'datalizer', 'shortcode_datalizer' );
 
 // Installation
 // création des bases de données
