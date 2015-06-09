@@ -25,5 +25,3 @@
 	</form>
 	<div id="ajaxOut"></div>
 </div>
-
-<?php
