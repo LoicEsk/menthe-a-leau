@@ -89,7 +89,7 @@ function postData(donnee, valeur){
 
   // Build the post string from an object
   var post_data = querystring.stringify({
-    'action': 'menthe_setData',
+    'action': 'datalizer_setData',
   'donnee' : donnee,
   'valeur' : valeur
   });
