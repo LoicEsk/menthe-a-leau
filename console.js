@@ -22,7 +22,7 @@ var http = require('http');
 serial.open(function (error) {
   var bufferSerial = "";
   if ( error ) {
-    console.log("Erreur de connexion deà la liaison série : "+error);
+    console.log("Erreur de connexion de à la liaison série : "+error);
     //serial.close();
 
   } else {

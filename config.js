@@ -18,10 +18,8 @@ try{
 	var dataRead = fs.readFileSync(file, 'utf8');
 	if(dataRead.length > 0){
 		// données reçues
-		//dataConfig = JSON.parse(dataRead);
-		dataConfig = dataRead;
-		console.log('config :');
-		console.log(dataConfig);
+		dataConfig = JSON.parse(dataRead);
+		console.log("Config chargée avec succès");
 	}
 }
 catch(e){
@@ -39,7 +37,7 @@ catch(e){
 
 
 function get(data){
-	console.log('config[' + data + '] -> ' + dataConfig[data]);
+	console.log('Lecture de config : config[' + data + '] -> ' + dataConfig[data]);
 	return dataConfig[data];
 }
 function set(data, value){
