@@ -19,13 +19,17 @@ var serial = new SerialPort(config.get('serialID'), {
 var querystring = require('querystring');
 var http = require('http');
 
-serial.open(function (error) {
-  var bufferSerial = "";
-  if ( error ) {
-    console.log("Erreur de connexion de à la liaison série : "+error);
-    //serial.close();
-
-  } else {
+function openSerial(){
+  serial.open(function (error) {
+    var bufferSerial = "";
+    if ( error ) {
+      console.log("Erreur à l'ouverture de la liaison série : ");
+      console.log("  -> " + error);
+      //serial.close();
+      console.log('Nouvelle tentative dans 10 min');
+      setTimeout(openSerial, 60000);
+  
+    } else {
     //serial.flush();
     console.log('Liaison série OK');
     console.log('Affiche du flux de données :');
@@ -74,20 +78,24 @@ serial.open(function (error) {
       }
 
     });
+    // END serial.on('data')
+    
     serial.on('close', function(erreur){
       console.log('Connexion série perdue !');
       console.log(erreur);
     })
     serial.on('error', function(erreur){
       console.log('Erreur sur la Liaison série : %s', erreur);
-    })
+    });
 
     /*serial.write("ls\n", function(err, results) {
       console.log('err ' + err);
       console.log('results ' + results);
     });*/
   }
-});
+  });
+}
+
 
 /* headers pour fournir un CSV ;
 res.header('content-type','text/csv');
@@ -136,6 +144,7 @@ io.sockets.on('connection', function (socket) {
 
 });
 
+openSerial();
 
 
 function PostData(donnee, valeur) {
