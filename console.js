@@ -27,7 +27,7 @@ function openSerial(){
       console.log("  -> " + error);
       //serial.close();
       console.log('Nouvelle tentative dans 10 min');
-      setTimeout(openSerial, 60000);
+      setTimeout(openSerial, 600000);
   
     } else {
     //serial.flush();
