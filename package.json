@@ -1,0 +1,27 @@
+{
+  "name": "Menthe-a-leau",
+  "preferGlobal": true,
+  "version": "0.1.0",
+  "author": "",
+  "description": "",
+  "contributors": [ 
+    {
+      "name": "",
+      "email": ""
+    } 
+  ],
+  "scripts": {
+    "start": "node console.js"
+  },
+  "dependencies" : {
+    "configure"   :  "*",
+    "express" :  "*",
+    "socket.io" :  "*",
+    "extend" : "*",
+    "serialport" : "*"
+  },
+  "analyze": false,  
+  "engines": {
+    "node": ">=0.8"
+  }
+}

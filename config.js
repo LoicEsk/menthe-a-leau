@@ -14,14 +14,28 @@ console.log('Chargement de la config');
 var fs = require('fs');
 var file = __dirname + '/config.json';
 
-var dataRead = fs.readFileSync(file, 'utf8');
-if(dataRead.length > 0){
-	// données reçues
-	//dataConfig = JSON.parse(dataRead);
-	dataConfig = dataRead;
-	console.log('config :');
-	console.log(dataConfig);
+try{
+	var dataRead = fs.readFileSync(file, 'utf8');
+	if(dataRead.length > 0){
+		// données reçues
+		//dataConfig = JSON.parse(dataRead);
+		dataConfig = dataRead;
+		console.log('config :');
+		console.log(dataConfig);
+	}
 }
+catch(e){
+	console.log("Fichier config manquant.");
+	console.log("Création du fichier par défaut");
+	console.log("Modifiez %s pour modifer la config", file);
+	configString = JSON.stringify(dataConfig);
+	fs.writeFile(file, configString, function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }
+	});
+}
+
 
 
 function get(data){
