@@ -3,7 +3,7 @@ var dataGlobal = [];
 
 // connection IO
 var socket = io.connect();
-socket.emit('echo');
+socket.emit('ping');
 
 socket.on('message', function(data){
 	var msgHTML = $("<div/>").html(data);

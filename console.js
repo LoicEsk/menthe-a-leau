@@ -137,8 +137,8 @@ io.sockets.on('connection', function (socket) {
     })*/
 
     // reception
-    socket.on('echo', function(){
-        socket.emit('message', '999 grosses dondons');
+    socket.on('ping', function(){
+        socket.emit('message', 'Ping recu');
     });
     
 
@@ -150,7 +150,7 @@ openSerial();
 function PostData(donnee, valeur) {
   // Build the post string from an object
   var post_data = querystring.stringify({
-    'action': 'menthe_setData',
+    'action': 'datalizer_setData',
     'donnee' : 'donnee',
     'valeur' : valeur
   });
