@@ -173,6 +173,13 @@ function PostData(donnee, valeur) {
       res.on('data', function (chunk) {
           console.log('Response: ' + chunk);
       });
+      post_req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+      // ça ne passe pas, on réessaye un peu plus tard
+      setTimeout(function(){
+        console.log("Nouvelle tentative d'envoi suite à un échec de %s: %d", donnee, valeur);
+        postData(donnee, valeur);
+      })
   });
 
   // post the data
