@@ -36,9 +36,17 @@ function openSerial(){
 
     serial.on('data', function(data) {
       io.emit('serial', data);// envois des données brut
-      console.log(data);
+      console.log('serial : %s', data);
 
       bufferSerial += data;
+      
+      var endLine = bufferSerial.indexOf('\n');
+      if(endLine > -1 ){
+        var lignes = bufferSerial.split('\n');
+        for(var i=0; i<lignes.length-2; i++){
+          console.log('Ligne : %s', lignes[i]);
+        }
+      }
 
       var now = new Date();
       var annee   = now.getFullYear();
@@ -47,9 +55,9 @@ function openSerial(){
       var dateFormat = annee + '-' + mois + '-' + jour;
       dateFormat += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 
-      //console.log("__");
-      //console.log('Donnees recues : %s', data);
-      //console.log("buffer : %s", bufferSerial);
+      console.log("__");
+      console.log('Donnees recues : %s', data);
+      console.log("buffer : %s", bufferSerial);
       var sep = bufferSerial.indexOf(';');
       while(sep > -1){
         var dataBrut = bufferSerial.substr(0, sep);
@@ -141,6 +149,9 @@ io.sockets.on('connection', function (socket) {
         socket.emit('message', 'Ping recu');
     });
     
+    socket.on('error', function(e){
+      console.log('Erreur socket.io');
+    });
 
 });
 
@@ -148,6 +159,10 @@ openSerial();
 
 
 function PostData(donnee, valeur) {
+  console.log('envoi de données');
+  var querystring = require('querystring');
+	var http = require('http');
+  
   // Build the post string from an object
   var post_data = querystring.stringify({
     'action': 'datalizer_setData',
@@ -171,15 +186,19 @@ function PostData(donnee, valeur) {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
+          //console.log('Response: ' + chunk);
       });
-      post_req.on('error', function(e) {
-      console.log('problem with request: ' + e.message);
-      // ça ne passe pas, on réessaye un peu plus tard
-      setTimeout(function(){
-        console.log("Nouvelle tentative d'envoi suite à un échec de %s: %d", donnee, valeur);
-        postData(donnee, valeur);
-      })
+  });
+  post_req.on('error', function(e) {
+    console.log('Erreur de la requette POST: ' + e.message);
+    console.log(e);
+    // ça ne passe pas, on réessaye un peu plus tard
+    //if(e.code == "")
+    var delayPost = function(){
+      //console.log("Nouvelle tentative d'envoi suite à un échec de %s: %d", donnee, valeur);
+      PostData(donnee, valeur);
+    }
+    setTimeout(delayPost, 500);
   });
 
   // post the data
