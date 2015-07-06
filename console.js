@@ -158,7 +158,7 @@ io.sockets.on('connection', function (socket) {
 openSerial();
 
 
-function PostData(donnee, valeur) {
+function PostData(donnee, valeur, nbTentatives) {
   console.log('envoi de données');
   var querystring = require('querystring');
 	var http = require('http');
@@ -186,7 +186,7 @@ function PostData(donnee, valeur) {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          //console.log('Response: ' + chunk);
+          console.log('Response: ' + chunk);
       });
   });
   post_req.on('error', function(e) {
