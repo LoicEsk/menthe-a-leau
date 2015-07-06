@@ -55,9 +55,9 @@ function openSerial(){
       var dateFormat = annee + '-' + mois + '-' + jour;
       dateFormat += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 
-      console.log("__");
+      /*console.log("__");
       console.log('Donnees recues : %s', data);
-      console.log("buffer : %s", bufferSerial);
+      console.log("buffer : %s", bufferSerial);*/
       var sep = bufferSerial.indexOf(';');
       while(sep > -1){
         var dataBrut = bufferSerial.substr(0, sep);
@@ -69,7 +69,7 @@ function openSerial(){
         var sepPos = dataBrut.indexOf('=');
         if(sepPos > 0){
           var decomposition = dataBrut.split('=');
-          console.log('%s : %s = %s', dateFormat, decomposition[0], decomposition[1]);
+          console.log('%s : POST -> %s = %s', dateFormat, decomposition[0], decomposition[1]);
           
           // enregistrement csv
           /*var donneeFormat = dateFormat + ';' + decomposition[0] + ';' + decomposition[1] + "\r\n";
@@ -174,7 +174,7 @@ function PostData(donnee, valeur, nbTentatives) {
   var post_options = {
       host: 'localhost',
       port: '80',
-      path: '/home/wp-admin/admin-ajax.php',
+      path: '/wp-admin/admin-ajax.php',
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -193,12 +193,13 @@ function PostData(donnee, valeur, nbTentatives) {
     console.log('Erreur de la requette POST: ' + e.message);
     console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
-    //if(e.code == "")
-    var delayPost = function(){
-      //console.log("Nouvelle tentative d'envoi suite à un échec de %s: %d", donnee, valeur);
-      PostData(donnee, valeur);
+    if(e.code == 'ECONNRESET'){
+      var delayPost = function(){
+        console.log("Nouvelle tentative d'envoi de %s: %d", donnee, valeur);
+        PostData(donnee, valeur);
+      }
+      setTimeout(delayPost, 500);
     }
-    setTimeout(delayPost, 500);
   });
 
   // post the data
