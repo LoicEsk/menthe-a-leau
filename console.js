@@ -36,7 +36,7 @@ function openSerial(){
 
     serial.on('data', function(data) {
       io.emit('serial', data);// envois des données brut
-      console.log('serial : %s', data);
+      //console.log('serial : %s', data);
 
       bufferSerial += data;
       
@@ -160,7 +160,7 @@ openSerial();
 
 
 function PostData(donnee, valeur, nbTentatives) {
-  console.log('envoi de données');
+  //console.log('envoi de données');
   var querystring = require('querystring');
 	var http = require('http');
   
@@ -187,7 +187,7 @@ function PostData(donnee, valeur, nbTentatives) {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
+          //console.log('Response: ' + chunk);
       });
   });
   post_req.on('error', function(e) {
