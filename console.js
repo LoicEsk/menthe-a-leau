@@ -44,7 +44,8 @@ function openSerial(){
       if(endLine > -1 ){
         var lignes = bufferSerial.split('\n');
         for(var i=0; i<lignes.length-2; i++){
-          console.log('Ligne : %s', lignes[i]);
+          //console.log('Ligne : %s', lignes[i]);
+          // quand ca fonctionnera, envoyer les ligne aux clients web
         }
       }
 
@@ -166,7 +167,7 @@ function PostData(donnee, valeur, nbTentatives) {
   // Build the post string from an object
   var post_data = querystring.stringify({
     'action': 'datalizer_setData',
-    'donnee' : 'donnee',
+    'donnee' : donnee,
     'valeur' : valeur
   });
 
