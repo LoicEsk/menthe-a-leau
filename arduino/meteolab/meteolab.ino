@@ -18,7 +18,7 @@
 =================== */
 // humidité terre
 const int PIN_POWER_HUMID = 7;
-const int PIN_HUMID1 = A1;
+const int PIN_HUMID1 = A5;
 // LED temoin
 const int PINLED = 8;
 // la pompe
