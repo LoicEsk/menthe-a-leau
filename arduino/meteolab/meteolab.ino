@@ -110,6 +110,12 @@ void loop(){
   // lecture série (commandes manuelles
   if(Serial.available() > 0) uiSerie();
   
+  unsigned long interWait = millis() - lastCapture;
+  Serial.print(F("Waiting : "));
+  Serial.print(interWait);
+  Serial.print(F("/"));
+  Serial.println(intervalCapture);
+  
   // temporisation
   if((millis() - lastCapture > intervalCapture) || (lastCapture == 0)){
     updateDatas(); // lecture capteurs
