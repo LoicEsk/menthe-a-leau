@@ -175,7 +175,7 @@ function PostData(donnee, valeur, nbTentatives) {
   var post_options = {
       host: 'localhost',
       port: '80',
-      path: '/wp-admin/admin-ajax.php',
+      path: config.get('urlPost'),
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
