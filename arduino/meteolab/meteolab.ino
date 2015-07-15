@@ -82,13 +82,6 @@ void setup(){
     humiditeMax = dataMem;
   }
   
-  // récupération de la dernière valeur humidiTerre
-  dataMem = EEPROM.read(2);
-  if((dataMem > 0) && (dataMem < 100)){
-    humidiTerre = dataMem;
-  }
-  Serial.print("HumidiTerre EEPROM = ");
-  Serial.println(dataMem);
   
   // attente de 1s pour laisser le temps aux capteurs de s'initialiser
   for(byte i = 0; i < 10; i++){
@@ -99,7 +92,8 @@ void setup(){
   }
   
   // initialisation capteurs
-  // rien à faire ...
+  humidiTerre = humiditeMax;  
+  
   
   // infos
   Serial.print(F("Niveau d'humidite maintenu entre "));
@@ -132,11 +126,11 @@ void loop(){
     lastFlashLed = millis();
     
     // infos sur la loop
-    unsigned long interWait = millis() - lastCapture;
+    /*unsigned long interWait = millis() - lastCapture;
     Serial.print(F("Waiting : "));
     Serial.print(interWait);
     Serial.print(F("/"));
-    Serial.println(intervalCapture);
+    Serial.println(intervalCapture);*/
   }
   if((erreur > 0) && (millis() - lastFlashLed > 500)){
     digitalWrite(PINLED, HIGH);
@@ -228,23 +222,18 @@ void getHumiditeTerre(boolean filtre){
   delay(10);
   digitalWrite(PIN_POWER_HUMID, LOW);
   float humidi = humidBrut / 1023 * 100; // donnée en %
-  Serial.print("moy humidiTerre av : ");
-  Serial.println(humidiTerre);
+
   // filtrage
   humidiTerre = (30 * humidiTerre + humidi) / 31;
   Serial.print("moy humidiTerre ap : ");
   Serial.println(humidiTerre);
   
-  // enregistrement
-  EEPROM.write(2, humidiTerre);
-  
-  if(filtre){
+  // le filtrage ne sert plus à rien. Il est fait d'office mais les 2 valeurs sont retournée en global (ce qui est crétin)
+  /*if(filtre){
     humiditeTerre = humidiTerre;
   }else
-    humiditeTerre = humidi;
+    humiditeTerre = humidi;*/
   
-  Serial.print(F("Humidite lue : "));
-  Serial.println(humidi);
   Serial.print(F(";HumiT="));
   Serial.print(humiditeTerre);
   //Serial.println(F("%"));
