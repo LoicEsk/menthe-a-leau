@@ -122,6 +122,13 @@ void loop(){
     delay(500);
     digitalWrite(PINLED, LOW);
     lastFlashLed = millis();
+    
+    // infos sur la loop
+    unsigned long interWait = millis() - lastCapture;
+    Serial.print(F("Waiting : "));
+    Serial.print(interWait);
+    Serial.print(F("/"));
+    Serial.println(intervalCapture);
   }
   if((erreur > 0) && (millis() - lastFlashLed > 500)){
     digitalWrite(PINLED, HIGH);
