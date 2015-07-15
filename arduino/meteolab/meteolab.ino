@@ -40,8 +40,7 @@ unsigned long intervalCapture = 1200000; // 20 min
 unsigned long lastCapture = 0;
 int luminositeMax = 80;
 unsigned long lastFlashLed = 0;
-float humidiTerre[15];
-byte idHumidiTerre = 0;
+float humidiTerre;
 float humiditeAir = 99;
 
 // données capteurs
@@ -93,8 +92,6 @@ void setup(){
   
   // initialisation capteurs
   getHumiditeTerre(false);
-  for(byte i = 0; i < (sizeof(humidiTerre)/sizeof(float)); i++)
-    humidiTerre[i] = humiditeTerre;
   
   // infos
   Serial.print(F("Niveau d'humidite maintenu entre "));
@@ -218,18 +215,10 @@ void getHumiditeTerre(boolean filtre){
   float humidi = humidBrut / 1023 * 100; // donnée en %
   
   // filtrage
-  byte nbMesures = sizeof(humidiTerre) / sizeof(float);
-  humidiTerre[idHumidiTerre] = humidi;
-  idHumidiTerre ++;
-  if(idHumidiTerre > nbMesures) idHumidiTerre = 0;
+  humidiTerre = (30 * humidiTerre + humidi) / 31;
   
   if(filtre){
-    float moyH = 0;
-    for(byte i = 0; i < nbMesures; i++){
-      moyH += humidiTerre[i];
-    }
-    moyH /= nbMesures;
-    humiditeTerre = moyH;
+    humiditeTerre = humidiTerre;
   }else
     humiditeTerre = humidi;
   
