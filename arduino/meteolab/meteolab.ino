@@ -92,7 +92,8 @@ void setup(){
   }
   
   // initialisation capteurs
-  humidiTerre = humiditeMax;  
+  getHumiditeTerre(false);
+  humidiTerre = humiditeTerre;  
   
   
   // infos
@@ -225,14 +226,11 @@ void getHumiditeTerre(boolean filtre){
 
   // filtrage
   humidiTerre = (30 * humidiTerre + humidi) / 31;
-  Serial.print("moy humidiTerre ap : ");
-  Serial.println(humidiTerre);
   
-  // le filtrage ne sert plus à rien. Il est fait d'office mais les 2 valeurs sont retournée en global (ce qui est crétin)
-  /*if(filtre){
+  if(filtre){
     humiditeTerre = humidiTerre;
   }else
-    humiditeTerre = humidi;*/
+    humiditeTerre = humidi;
   
   Serial.print(F(";HumiT="));
   Serial.print(humiditeTerre);
@@ -240,6 +238,7 @@ void getHumiditeTerre(boolean filtre){
   Serial.print(F(";HumiTbrut="));
   Serial.print(humidi);
   Serial.println(';');
+
 }
 
 float getHumiditeDHT(){
