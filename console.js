@@ -4,6 +4,9 @@
   @author : Loïc Laurent
 
 	docs : https://www.npmjs.org/package/serialport
+  
+  version : 1.1
+
 */
 
 
@@ -26,8 +29,8 @@ function openSerial(){
       console.log("Erreur à l'ouverture de la liaison série : ");
       console.log("  -> " + error);
       //serial.close();
-      console.log('Nouvelle tentative dans 10 min');
-      setTimeout(openSerial, 600000);
+      console.log('Nouvelle tentative dans 5 min');
+      setTimeout(openSerial, 300000);
   
     } else {
     //serial.flush();
@@ -79,7 +82,7 @@ function openSerial(){
           });*/
 
           // envois http
-          PostData(decomposition[0], decomposition[1]);
+          PostData(decomposition[0], decomposition[1], dateFormat);
 
         }
 
@@ -105,11 +108,6 @@ function openSerial(){
   });
 }
 
-
-/* headers pour fournir un CSV ;
-res.header('content-type','text/csv');
-res.header('content-disposition', 'attachment; filename=report.csv');
-*/
 
 // serveur HTTP
 var express = require('express');
@@ -159,7 +157,7 @@ io.sockets.on('connection', function (socket) {
 openSerial();
 
 
-function PostData(donnee, valeur, nbTentatives) {
+function PostData(donnee, valeur, dateStr) {
   //console.log('envoi de données');
   var querystring = require('querystring');
 	var http = require('http');
@@ -168,7 +166,8 @@ function PostData(donnee, valeur, nbTentatives) {
   var post_data = querystring.stringify({
     'action': 'datalizer_setData',
     'donnee' : donnee,
-    'valeur' : valeur
+    'valeur' : valeur,
+    'date' :   dateStr
   });
 
   // An object of options to indicate where to post to
@@ -187,17 +186,17 @@ function PostData(donnee, valeur, nbTentatives) {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          //console.log('Response: ' + chunk);
+          console.log('Response: ' + chunk);
       });
   });
   post_req.on('error', function(e) {
     console.log('Erreur de la requette POST: ' + e.message);
-    console.log(e);
+    //console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
     if(e.code == 'ECONNRESET'){
       var delayPost = function(){
         console.log("Nouvelle tentative d'envoi de %s: %d", donnee, valeur);
-        PostData(donnee, valeur);
+        PostData(donnee, valeur, dateStr);
       }
       setTimeout(delayPost, 500);
     }
