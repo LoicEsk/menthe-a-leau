@@ -26,10 +26,10 @@ function openSerial(){
   serial.open(function (error) {
     var bufferSerial = "";
     if ( error ) {
-      console.log("Erreur à l'ouverture de la liaison série : ");
+      console.log("%s : Erreur à l'ouverture de la liaison série : ", dateStr());
       console.log("  -> " + error);
       //serial.close();
-      console.log('Nouvelle tentative dans 5 min');
+      console.log('%s : Nouvelle tentative dans 5 min', dateStr());
       setTimeout(openSerial, 300000);
   
     } else {
@@ -52,12 +52,7 @@ function openSerial(){
         }
       }
 
-      var now = new Date();
-      var annee   = now.getFullYear();
-      var mois    = now.getMonth() + 1;
-      var jour    = now.getDate();
-      var dateFormat = annee + '-' + mois + '-' + jour;
-      dateFormat += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+      dateFormat = dateStr();
 
       /*console.log("__");
       console.log('Donnees recues : %s', data);
@@ -93,8 +88,9 @@ function openSerial(){
     // END serial.on('data')
     
     serial.on('close', function(erreur){
-      console.log('Connexion série perdue !');
-      console.log(erreur);
+      console.log('%s : Connexion série perdue !', dateStr());
+      console.log('%s : Reconnexion dans 5 min', dateStr());
+      setTimeout(openSerial, 300000);
     })
     serial.on('error', function(erreur){
       console.log('Erreur sur la Liaison série : %s', erreur);
@@ -186,7 +182,7 @@ function PostData(donnee, valeur, dateStr) {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
+          //console.log('Response: ' + chunk);
       });
   });
   post_req.on('error', function(e) {
@@ -206,4 +202,14 @@ function PostData(donnee, valeur, dateStr) {
   post_req.write(post_data);
   post_req.end();
 
+}
+
+function dateStr(){
+  var now = new Date();
+  var annee   = now.getFullYear();
+  var mois    = now.getMonth() + 1;
+  var jour    = now.getDate();
+  var dateFormat = annee + '-' + mois + '-' + jour;
+  dateFormat += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+  return dateFormat;
 }
