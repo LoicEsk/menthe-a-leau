@@ -89,6 +89,8 @@ function openSerial(){
     
     serial.on('close', function(erreur){
       console.log('%s : Connexion série perdue !', dateStr());
+      if(serial.isOpen()) console.log('La connexion est toujours ouverte ...');
+      else console.log('La connexion est fermée');
       console.log('%s : Reconnexion dans 5 min', dateStr());
       setTimeout(openSerial, 300000);
     })
@@ -120,7 +122,7 @@ app.use(express.static(__dirname + '/http'))
 .use(function(req, res, next){
   // 404
     res.setHeader('Content-Type', 'text/plain');
-    res.send(404, 'Page introuvable !');
+    res.status(404).send('Page introuvable !');
 });
 var serveur = app.listen(8080);
 console.log("_____________________");
