@@ -5,7 +5,7 @@
 
 	docs : https://www.npmjs.org/package/serialport
   
-  version : 1.1
+  version : 1.2
 
 */
 
@@ -188,15 +188,15 @@ function PostData(donnee, valeur, dateStr) {
       });
   });
   post_req.on('error', function(e) {
-    console.log('Erreur de la requette POST: ' + e.message);
+    console.log('%s : Erreur de la requette POST: %s', dateStr(), e.message);
     //console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
     if(e.code == 'ECONNRESET'){
       var delayPost = function(){
-        console.log("Nouvelle tentative d'envoi de %s: %d", donnee, valeur);
+        console.log("%s : Nouvelle tentative d'envoi de %s: %d", dateStr(), donnee, valeur);
         PostData(donnee, valeur, dateStr);
       }
-      setTimeout(delayPost, 500);
+      setTimeout(delayPost, 1500);
     }
   });
 
