@@ -135,6 +135,7 @@ void loop(){
     }
     digitalWrite(PIN_POMPE, LOW);
     digitalWrite(PINLED, LOW); // LED
+    // mise à jour des données
     updateDatas();
   }
   
