@@ -188,7 +188,7 @@ function PostData(donnee, valeur, dateStr) {
       });
   });
   post_req.on('error', function(e) {
-    console.log('%s : Erreur de la requette POST: %s', dateStr(), e.message);
+    console.log("%s : Erreur de la requette POST: %s", dateStr(), e.message);
     //console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
     if(e.code == 'ECONNRESET'){
