@@ -128,6 +128,7 @@ app.on('error', function(){
   console.log('Erreur Expess');
 });
 var serveur = app.listen(8080);
+serveur.on('error', function(){ console.log('== ERREUR SERVEUR =='); });
 console.log("_____________________");
 console.log("http sur port 8080");
 console.log("ctrl+C pour arreter");
