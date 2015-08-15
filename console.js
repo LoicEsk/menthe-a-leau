@@ -5,7 +5,7 @@
 
 	docs : https://www.npmjs.org/package/serialport
   
-  version : 1.1
+  version : 1.2
 
 */
 
@@ -89,6 +89,8 @@ function openSerial(){
     
     serial.on('close', function(erreur){
       console.log('%s : Connexion série perdue !', dateStr());
+      if(serial.isOpen()) console.log('La connexion est toujours ouverte ...');
+      else console.log('La connexion est fermée');
       console.log('%s : Reconnexion dans 5 min', dateStr());
       setTimeout(openSerial, 300000);
     })
@@ -120,7 +122,7 @@ app.use(express.static(__dirname + '/http'))
 .use(function(req, res, next){
   // 404
     res.setHeader('Content-Type', 'text/plain');
-    res.send(404, 'Page introuvable !');
+    res.status(404).send('Page introuvable !');
 });
 var serveur = app.listen(8080);
 console.log("_____________________");
@@ -186,15 +188,15 @@ function PostData(donnee, valeur, dateStr) {
       });
   });
   post_req.on('error', function(e) {
-    console.log('Erreur de la requette POST: ' + e.message);
+    console.log("%s : Erreur de la requette POST: %s", dateStr(), e.message);
     //console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
     if(e.code == 'ECONNRESET'){
       var delayPost = function(){
-        console.log("Nouvelle tentative d'envoi de %s: %d", donnee, valeur);
+        console.log("%s : Nouvelle tentative d'envoi de %s: %d", dateStr(), donnee, valeur);
         PostData(donnee, valeur, dateStr);
       }
-      setTimeout(delayPost, 500);
+      setTimeout(delayPost, 1500);
     }
   });
 

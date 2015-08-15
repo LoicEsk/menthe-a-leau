@@ -23,8 +23,10 @@ const int PIN_HUMID1 = A5;
 const int PINLED = 8;
 // la pompe
 const int PIN_POMPE = 3; // PWM
-// led lcd
-const int PIN_LEDLCD = 9;
+// photoresistance
+const int PIN_PHOTOR = A0;
+// bouton marche foréce pompe
+const int PIN_BTN_POMPE = 4;
 
 // température
 OneWire  ds(10);
@@ -68,6 +70,8 @@ void setup(){
   //pins pompe
   pinMode(PIN_POMPE, OUTPUT);
   digitalWrite(PIN_POMPE, LOW);
+  // bouton pompe
+  pinMode(PIN_BTN_POMPE, INPUT);
   
   // pin LED
   pinMode(PINLED, OUTPUT);
@@ -118,6 +122,21 @@ void loop(){
         arrosage(); 
     }
     lastCapture = millis();
+  }
+  
+  // bouton de marche forcée de la pompe
+  int btnState = digitalRead(PIN_BTN_POMPE);
+  if(btnState == HIGH){
+    // mise en route de la pompe
+    digitalWrite(PIN_POMPE, HIGH);
+    digitalWrite(PINLED, HIGH); // LED
+    while(digitalRead(PIN_BTN_POMPE)){
+      delay(100);
+    }
+    digitalWrite(PIN_POMPE, LOW);
+    digitalWrite(PINLED, LOW); // LED
+    // mise à jour des données
+    updateDatas();
   }
   
   if((erreur == 0) && (millis() - lastFlashLed > 4500)){

@@ -13,8 +13,14 @@ body{
 	margin: 0 auto;
 	padding: 10px 20px;
 }
-#serial .input{
+#serial form{
 	width: 100%;
+}
+#serial input{
+	width: 70%;
+}
+#serial button{
+	width: 20%
 }
 #data-serial{
 	margin: 10px 0;
