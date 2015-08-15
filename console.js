@@ -126,7 +126,7 @@ app.use(express.static(__dirname + '/http'))
 });
 app.on('error', function(){
   console.log('Erreur Expess');
-}
+});
 var serveur = app.listen(8080);
 console.log("_____________________");
 console.log("http sur port 8080");
