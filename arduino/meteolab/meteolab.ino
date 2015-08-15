@@ -225,7 +225,7 @@ void getHumiditeTerre(boolean filtre){
   float humidi = humidBrut / 1023 * 100; // donnée en %
 
   // filtrage
-  humidiTerre = (30 * humidiTerre + humidi) / 31;
+  humidiTerre = (20 * humidiTerre + humidi) / 21;
   
   if(filtre){
     humiditeTerre = humidiTerre;
