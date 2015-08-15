@@ -124,6 +124,9 @@ app.use(express.static(__dirname + '/http'))
     res.setHeader('Content-Type', 'text/plain');
     res.status(404).send('Page introuvable !');
 });
+app.on('error', function(){
+  console.log('Erreur Expess');
+}
 var serveur = app.listen(8080);
 console.log("_____________________");
 console.log("http sur port 8080");
