@@ -26,10 +26,10 @@ function openSerial(){
   serial.open(function (error) {
     var bufferSerial = "";
     if ( error ) {
-      console.log("%s : Erreur à l'ouverture de la liaison série : ", dateStr());
+      console.log("%s : Erreur à l'ouverture de la liaison série : ", getDateStr());
       console.log("  -> " + error);
       //serial.close();
-      console.log('%s : Nouvelle tentative dans 5 min', dateStr());
+      console.log('%s : Nouvelle tentative dans 5 min', getDateStr());
       setTimeout(openSerial, 300000);
   
     } else {
@@ -52,7 +52,7 @@ function openSerial(){
         }
       }
 
-      dateFormat = dateStr();
+      dateFormat = getDateStr();
 
       /*console.log("__");
       console.log('Donnees recues : %s', data);
@@ -88,10 +88,10 @@ function openSerial(){
     // END serial.on('data')
     
     serial.on('close', function(erreur){
-      console.log('%s : Connexion série perdue !', dateStr());
+      console.log('%s : Connexion série perdue !', getDateStr());
       if(serial.isOpen()) console.log('La connexion est toujours ouverte ...');
       else console.log('La connexion est fermée');
-      console.log('%s : Reconnexion dans 5 min', dateStr());
+      console.log('%s : Reconnexion dans 5 min', getDateStr());
       setTimeout(openSerial, 300000);
     })
     serial.on('error', function(erreur){
@@ -192,12 +192,12 @@ function PostData(donnee, valeur, dateStr) {
       });
   });
   post_req.on('error', function(e) {
-    console.log("%s : Erreur de la requette POST: %s", dateStr(), e.message);
+    console.log("%s : Erreur de la requette POST: %s", getDateStr(), e.message);
     //console.log(e);
     // ça ne passe pas, on réessaye un peu plus tard
     if(e.code == 'ECONNRESET'){
       var delayPost = function(){
-        console.log("%s : Nouvelle tentative d'envoi de %s: %d", dateStr(), donnee, valeur);
+        console.log("%s : Nouvelle tentative d'envoi de %s: %d", getDateStr(), donnee, valeur);
         PostData(donnee, valeur, dateStr);
       }
       setTimeout(delayPost, 1500);
@@ -210,7 +210,7 @@ function PostData(donnee, valeur, dateStr) {
 
 }
 
-function dateStr(){
+function getDateStr(){
   var now = new Date();
   var annee   = now.getFullYear();
   var mois    = now.getMonth() + 1;
