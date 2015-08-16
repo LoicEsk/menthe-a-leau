@@ -128,6 +128,8 @@ void loop(){
   int btnState = digitalRead(PIN_BTN_POMPE);
   if(btnState == HIGH){
     // mise en route de la pompe
+    Serial.print(F(";arrosage_manuel=0;"));
+    Serial.print(F(";arrosage_manuel=100;"));
     digitalWrite(PIN_POMPE, HIGH);
     digitalWrite(PINLED, HIGH); // LED
     while(digitalRead(PIN_BTN_POMPE)){
@@ -135,6 +137,8 @@ void loop(){
     }
     digitalWrite(PIN_POMPE, LOW);
     digitalWrite(PINLED, LOW); // LED
+    Serial.print(F(";arrosage_manuel=100;"));
+    Serial.print(F(";arrosage_manuel=0;"));
     // mise à jour des données
     updateDatas();
   }
