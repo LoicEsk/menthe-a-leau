@@ -140,7 +140,7 @@ void loop(){
     Serial.print(F(";arrosage_manuel=100;"));
     Serial.print(F(";arrosage_manuel=0;"));
     // mise à jour des données
-    updateDatas();
+    //updateDatas();
   }
   
   if((erreur == 0) && (millis() - lastFlashLed > 4500)){
