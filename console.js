@@ -19,6 +19,9 @@ var serial = new SerialPort(config.get('serialID'), {
   baudrate: config.get('baudrate')
 }, false); // this is the openImmediately flag [default is true]
 
+var events = require("events");
+var dispatch = new events.EventEmitter();
+
 var querystring = require('querystring');
 var http = require('http');
 
@@ -38,7 +41,7 @@ function openSerial(){
     console.log('Affiche du flux de données :');
 
     serial.on('data', function(data) {
-      io.emit('serial', data);// envois des données brut
+      dispatch.emit('serial', data);// envois des données brut
       //console.log('serial : %s', data);
 
       bufferSerial += data;
@@ -152,6 +155,10 @@ io.sockets.on('connection', function (socket) {
     
     socket.on('error', function(e){
       console.log('Erreur socket.io');
+    });
+    
+    dispatch.on('serial', function(m){
+      socket.emit('serial', m);
     });
 
 });
