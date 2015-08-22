@@ -231,6 +231,6 @@ function getDateStr(){
 
 // debug dispatch
 setInterval(function(){
-  console.log('simulation série');
+  //console.log('simulation série');
   dispatch.emit('serial', 'emulation serial event');
 }, 10000);
