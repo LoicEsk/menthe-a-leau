@@ -6,8 +6,8 @@ var socket = io.connect();
 socket.emit('ping');
 
 socket.on('message', function(data){
-	var msgHTML = $("<div/>").html(data);
-	$("#content").append(msgHTML);
+	var msgHTML = $("<p/>").html(data);
+	$("#data-serial").append(msgHTML);
 });
 socket.on('donnees', function(data){
 	var dataObj = data.paseJSON;
@@ -19,8 +19,9 @@ socket.on('donnees', function(data){
 })
 
 socket.on('serial', function(data){
-	var msgHTML = $("<div/>").html(data);
-	$("#serial").append(msgHTML);
+	var $dataZone = $('#data-serial');
+	data.replace('#\n#g', '<br />');
+	$dataZone.html($dataZone.html() + data);
 	
 });
 

@@ -14,7 +14,10 @@ body{
 	padding: 10px 20px;
 }
 #serial form{
+	max-width: 800px;
 	width: 100%;
+	position: fixed;
+	bottom: 0.5em;
 }
 #serial input{
 	width: 70%;
@@ -25,3 +28,32 @@ body{
 #data-serial{
 	margin: 10px 0;
 }
+#data-serial::after{
+	content: " ";
+	display: inline-block;
+	width: 0.6em;
+	height: 0.8em;
+	background: #666;
+	/*margin: 0 0.5em;*/
+	
+	animation: blink 2s infinite
+	
+}
+
+@keyframes blink{
+	0%{
+		opacity: 1;
+	}
+	40%{
+		opacity: 1;
+	}
+	50%{
+		opacity: 0;
+	}
+	90%{
+		opacity: 0;
+	}
+	100%{
+		opacity: 1;
+	}
+} 

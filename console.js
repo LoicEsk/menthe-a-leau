@@ -158,6 +158,7 @@ io.sockets.on('connection', function (socket) {
     });
     
     dispatch.on('serial', function(m){
+      console.log('dispatch message : %s', m);
       socket.emit('serial', m);
     });
 
@@ -226,3 +227,10 @@ function getDateStr(){
   dateFormat += ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
   return dateFormat;
 }
+
+
+// debug dispatch
+setInterval(function(){
+  console.log('simulation série');
+  dispatch.emit('serial', 'emulation serial event');
+}, 10000);
