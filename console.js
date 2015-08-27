@@ -19,8 +19,6 @@ var serial = new SerialPort(config.get('serialID'), {
   baudrate: config.get('baudrate')
 }, false); // this is the openImmediately flag [default is true]
 
-var events = require("events");
-var dispatch = new events.EventEmitter();
 
 var querystring = require('querystring');
 var http = require('http');
@@ -39,9 +37,16 @@ function openSerial(){
     //serial.flush();
     console.log('Liaison série OK');
     console.log('Affiche du flux de données :');
+    
+    // ping toutes les 10s pour tracker les erreurs
+    setInterval(function(){
+      serial.write('ping');
+      //console.log('ping');
+    }, 10000);
 
     serial.on('data', function(data) {
-      dispatch.emit('serial', data);// envois des données brut
+      
+      io.sockets.emit('serial', data);// envois des données brut
       //console.log('serial : %s', data);
 
       bufferSerial += data;
@@ -82,6 +87,7 @@ function openSerial(){
           // envois http
           PostData(decomposition[0], decomposition[1], dateFormat);
 
+          io.sockets.emit('message', '')
         }
 
         sep = bufferSerial.indexOf(';');
@@ -92,7 +98,10 @@ function openSerial(){
     
     serial.on('close', function(erreur){
       console.log('%s : Connexion série perdue !', getDateStr());
-      if(serial.isOpen()) console.log('La connexion est toujours ouverte ...');
+      if(serial.isOpen()){
+        console.log('Fermeture de la liaison');
+        serial.close();
+      }
       else console.log('La connexion est fermée');
       console.log('%s : Reconnexion dans 5 min', getDateStr());
       setTimeout(openSerial, 300000);
@@ -157,10 +166,6 @@ io.sockets.on('connection', function (socket) {
       console.log('Erreur socket.io');
     });
     
-    dispatch.on('serial', function(m){
-      console.log('dispatch message : %s', m);
-      socket.emit('serial', m);
-    });
 
 });
 
@@ -228,9 +233,3 @@ function getDateStr(){
   return dateFormat;
 }
 
-
-// debug dispatch
-setInterval(function(){
-  //console.log('simulation série');
-  dispatch.emit('serial', 'emulation serial event');
-}, 10000);
