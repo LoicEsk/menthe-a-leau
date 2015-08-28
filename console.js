@@ -215,7 +215,7 @@ function PostData(donnee, valeur, dateStr) {
         console.log("%s : Nouvelle tentative d'envoi de %s: %d", getDateStr(), donnee, valeur);
         PostData(donnee, valeur, dateStr);
       }
-      setTimeout(delayPost, 1500);
+      setTimeout(delayPost, 5000);
     }
   });
 
