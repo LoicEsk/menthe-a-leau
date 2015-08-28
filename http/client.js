@@ -20,9 +20,19 @@ socket.on('donnees', function(data){
 
 socket.on('serial', function(data){
 	var $dataZone = $('#data-serial');
-	data.replace('#\n#g', '<br />');
-	$dataZone.html($dataZone.html() + data);
+	var res = String.fromCharCode(10);
+	//var nData = data.replace('#'+res+'#g', '<br />');
+	var nData = "";
 	
+	for(var i=0; i<data.length; i++){
+		if(data.charCodeAt(i) == 13){
+			nData += '<br />';
+		}else
+			nData += data.charAt(i);
+	}
+	//console.log('data converit : %s', nData);
+	$dataZone.html($dataZone.html() + nData);
+	window.scrollTo(0, document.body.scrollHeight);
 });
 
 $('form').submit(function(event){

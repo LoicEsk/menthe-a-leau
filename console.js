@@ -23,101 +23,7 @@ var serial = new SerialPort(config.get('serialID'), {
 var querystring = require('querystring');
 var http = require('http');
 
-function openSerial(){
-  serial.open(function (error) {
-    var bufferSerial = "";
-    if ( error ) {
-      console.log("%s : Erreur à l'ouverture de la liaison série : ", getDateStr());
-      console.log("  -> " + error);
-      //serial.close();
-      console.log('%s : Nouvelle tentative dans 5 min', getDateStr());
-      setTimeout(openSerial, 300000);
-  
-    } else {
-    //serial.flush();
-    console.log('Liaison série OK');
-    console.log('Affiche du flux de données :');
-    
-    // ping toutes les 10s pour tracker les erreurs
-    setInterval(function(){
-      serial.write('ping');
-      //console.log('ping');
-    }, 10000);
-
-    serial.on('data', function(data) {
-      
-      io.sockets.emit('serial', data);// envois des données brut
-      //console.log('serial : %s', data);
-
-      bufferSerial += data;
-      
-      var endLine = bufferSerial.indexOf('\n');
-      if(endLine > -1 ){
-        var lignes = bufferSerial.split('\n');
-        for(var i=0; i<lignes.length-2; i++){
-          //console.log('Ligne : %s', lignes[i]);
-          // quand ca fonctionnera, envoyer les ligne aux clients web
-        }
-      }
-
-      dateFormat = getDateStr();
-
-      /*console.log("__");
-      console.log('Donnees recues : %s', data);
-      console.log("buffer : %s", bufferSerial);*/
-      var sep = bufferSerial.indexOf(';');
-      while(sep > -1){
-        var dataBrut = bufferSerial.substr(0, sep);
-        bufferSerial = bufferSerial.substring(sep + 1, bufferSerial.lenght);
-        //console.log('sep = %d', sep);
-        //console.log("dataBrut = %s",dataBrut);
-        //console.log("buffer = %s", bufferSerial);
-
-        var sepPos = dataBrut.indexOf('=');
-        if(sepPos > 0){
-          var decomposition = dataBrut.split('=');
-          console.log('%s : POST -> %s = %s', dateFormat, decomposition[0], decomposition[1]);
-          
-          // enregistrement csv
-          /*var donneeFormat = dateFormat + ';' + decomposition[0] + ';' + decomposition[1] + "\r\n";
-          fs.appendFile('data.csv', donneeFormat, function (err) {
-            if (err) console.log("Erreur d'écriture dans le fichier data.csv");
-          });*/
-
-          // envois http
-          PostData(decomposition[0], decomposition[1], dateFormat);
-
-          io.sockets.emit('message', '')
-        }
-
-        sep = bufferSerial.indexOf(';');
-      }
-
-    });
-    // END serial.on('data')
-    
-    serial.on('close', function(erreur){
-      console.log('%s : Connexion série perdue !', getDateStr());
-      if(serial.isOpen()){
-        console.log('Fermeture de la liaison');
-        serial.close();
-      }
-      else console.log('La connexion est fermée');
-      console.log('%s : Reconnexion dans 5 min', getDateStr());
-      setTimeout(openSerial, 300000);
-    })
-    serial.on('error', function(erreur){
-      console.log('Erreur sur la Liaison série : %s', erreur);
-    });
-
-    /*serial.write("ls\n", function(err, results) {
-      console.log('err ' + err);
-      console.log('results ' + results);
-    });*/
-  }
-  });
-}
-
+var bufferSerial = "";
 
 // serveur HTTP
 var express = require('express');
@@ -146,10 +52,11 @@ console.log("http sur port 8080");
 console.log("ctrl+C pour arreter");
 
 // Chargement de socket.io
-var io = require('socket.io').listen(serveur, { log: false });//
+var io = require('socket.io').listen(serveur/*, { log: false }*/);//
 // Quand on client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
-    //console.log('Un client est connecté à socket.io');
+    console.log('%s > Un client est connecté à socket.io', getDateStr());
+    
     socket.emit('message', 'Connecté à socket.io');
 
     // connexion coupee
@@ -168,6 +75,101 @@ io.sockets.on('connection', function (socket) {
     
 
 });
+
+function openSerial(){
+  serial.open(function (error) {
+    if ( error ) {
+      console.log("%s : Erreur à l'ouverture de la liaison série : ", getDateStr());
+      console.log("  -> " + error);
+      //serial.close();
+      console.log('%s : Nouvelle tentative dans 5 min', getDateStr());
+      setTimeout(openSerial, 300000);
+  
+    } else {
+      //serial.flush();
+      console.log('Liaison série OK');
+      console.log('Affiche du flux de données :');
+      
+      // ping toutes les 10s pour tracker les erreurs
+      /*setInterval(function(){
+        serial.write('ping');
+        //console.log('ping');
+        io.sockets.emit('message', 'ping liaison serie');
+      }, 10000);*/
+    }
+  });
+}
+
+serial.on('data', function(data) {
+  
+  io.sockets.emit('serial', data.toString());// envois des données brut
+  //console.log('serial : %s', data);
+  
+  bufferSerial += data.toString();
+  
+  var endLine = bufferSerial.indexOf('\n');
+  if(endLine > -1 ){
+    var lignes = bufferSerial.split('\n');
+    for(var i=0; i<lignes.length-2; i++){
+      //console.log('Ligne : %s', lignes[i]);
+      // quand ca fonctionnera, envoyer les ligne aux clients web
+    }
+  }
+  
+  dateFormat = getDateStr();
+  
+  /*console.log("__");
+  console.log('Donnees recues : %s', data);
+  console.log("buffer : %s", bufferSerial);*/
+  var sep = bufferSerial.indexOf(';');
+  while(sep > -1){
+    var dataBrut = bufferSerial.substr(0, sep);
+    bufferSerial = bufferSerial.substring(sep + 1, bufferSerial.lenght);
+    //console.log('sep = %d', sep);
+    //console.log("dataBrut = %s",dataBrut);
+    //console.log("buffer = %s", bufferSerial);
+  
+    var sepPos = dataBrut.indexOf('=');
+    if(sepPos > 0){
+      var decomposition = dataBrut.split('=');
+      console.log('%s : POST -> %s = %s', dateFormat, decomposition[0], decomposition[1]);
+      
+      // enregistrement csv
+      /*var donneeFormat = dateFormat + ';' + decomposition[0] + ';' + decomposition[1] + "\r\n";
+      fs.appendFile('data.csv', donneeFormat, function (err) {
+        if (err) console.log("Erreur d'écriture dans le fichier data.csv");
+      });*/
+  
+      // envois http
+      PostData(decomposition[0], decomposition[1], dateFormat);
+  
+    }
+  
+    sep = bufferSerial.indexOf(';');
+  }
+
+});
+// END serial.on('data')
+    
+serial.on('close', function(erreur){
+  console.log('%s : Connexion série perdue !', getDateStr());
+  io.sockets.emit('message', 'Connexion série perdue');
+  if(serial.isOpen()){
+    console.log('Fermeture de la liaison');
+    serial.close();
+  }
+  else console.log('La connexion est fermée');
+  console.log('%s : Reconnexion dans 5 min', getDateStr());
+  setTimeout(openSerial, 300000);
+});
+
+serial.on('error', function(erreur){
+  console.log('Erreur sur la Liaison série : %s', erreur);
+});
+
+
+
+
 
 openSerial();
 
