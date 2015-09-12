@@ -63,6 +63,15 @@ io.sockets.on('connection', function (socket) {
     /*socket.on('disconnect', function(){
         console.log('Un client s\'est déconnecté.');
     })*/
+    
+    socket.on('serial', function(data){
+      if(serial.isOpen()){
+        serial.write(data);
+        console.log("serie << %s", data);
+      }else{
+        console.log("serie <X %s", data);
+      }
+    })
 
     // reception
     socket.on('ping', function(){
