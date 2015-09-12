@@ -20,7 +20,7 @@ $(document).ready(function() {
 	
 	socket.on('serial', function(data){
 		var $dataZone = $('#data-serial');
-		var res = String.fromCharCode(10);
+		/*var res = String.fromCharCode(10);
 		//var nData = data.replace('#'+res+'#g', '<br />');
 		var nData = "";
 		
@@ -29,8 +29,10 @@ $(document).ready(function() {
 				nData += '<br />';
 			}else
 				nData += data.charAt(i);
-		}
+		}*/
 		//console.log('data converit : %s', nData);
+		
+		var nData = data + '<br />';
 		$dataZone.html($dataZone.html() + nData);
 		window.scrollTo(0, document.body.scrollHeight);
 	});

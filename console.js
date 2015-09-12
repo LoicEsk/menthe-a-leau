@@ -14,10 +14,13 @@ console.log('Serial logger');
 
 var fs = require('fs');
 var config = require("./config.js");
-var SerialPort = require("serialport").SerialPort;
+
+var serialport = require("serialport");
+var SerialPort = serialport.SerialPort; // localize object constructor 
 var serial = new SerialPort(config.get('serialID'), {
-  baudrate: config.get('baudrate')
-}, false); // this is the openImmediately flag [default is true]
+  baudrate: config.get('baudrate'),
+  parser: serialport.parsers.readline("\n") // parser de fin de lignes
+}, false);
 
 
 var querystring = require('querystring');
