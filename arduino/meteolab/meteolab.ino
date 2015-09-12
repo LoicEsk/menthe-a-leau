@@ -101,12 +101,7 @@ void setup(){
   
   
   // infos
-  Serial.print(F("Niveau d'humidite maintenu entre "));
-  Serial.print(humiditeMin);
-  Serial.print(F("%"));
-  Serial.print(F(" et "));
-  Serial.print(humiditeMax);
-  Serial.println(F(" %"));
+  printConfig();
 
 }
 
@@ -173,6 +168,7 @@ void uiSerie(){
   
   switch(commande){
     case 1: // lecture des données capteurs
+      printConfig(); // infos paramétrage
       updateDatas(); // lecture capteurs et affichage
       break;
     case 2: // changement du niveau d'humidité
@@ -359,6 +355,15 @@ float getTemperatureDHT(){
   }
   
   return t;
+}
+
+void printConfig(){
+  Serial.print(F("Niveau d'humidite maintenu entre "));
+  Serial.print(humiditeMin);
+  Serial.print(F("%"));
+  Serial.print(F(" et "));
+  Serial.print(humiditeMax);
+  Serial.println(F(" %"));
 }
 
 
