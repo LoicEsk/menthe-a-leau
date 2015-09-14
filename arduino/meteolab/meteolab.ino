@@ -109,6 +109,9 @@ void loop(){
   // lecture série (commandes manuelles
   if(Serial.available() > 0) uiSerie();
   
+  // anti dépassement de valeur
+  if(millis() < lastCapture) lastCapture = 0;
+  
   // temporisation
   if((millis() - lastCapture > intervalCapture) || (lastCapture == 0)){
     updateDatas(); // lecture capteurs
