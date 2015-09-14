@@ -127,6 +127,7 @@ void loop(){
   if(btnState == HIGH){
     // mise en route de la pompe
     Serial.print(F(";arrosage_manuel=0;"));
+    delay(1000);
     Serial.print(F(";arrosage_manuel=100;"));
     digitalWrite(PIN_POMPE, HIGH);
     digitalWrite(PINLED, HIGH); // LED
@@ -136,6 +137,7 @@ void loop(){
     digitalWrite(PIN_POMPE, LOW);
     digitalWrite(PINLED, LOW); // LED
     Serial.print(F(";arrosage_manuel=100;"));
+    delay(1000);
     Serial.print(F(";arrosage_manuel=0;"));
     // mise à jour des données
     //updateDatas();
@@ -287,6 +289,7 @@ void arrosage(){
   
   Serial.println(F("Arrosage !"));
   Serial.print(F(";arrosage=0;"));
+  delay(1000); // pour les courbes de données
   Serial.print(F(";arrosage=100;"));
   
   // démarrage pompe
@@ -294,11 +297,11 @@ void arrosage(){
   digitalWrite(PINLED, HIGH); // LED
   
   Serial.println("Demarrage pompe");
-  for(byte i = 220; i < 255; i++){
+  /*for(byte i = 220; i < 255; i++){
     analogWrite(PIN_POMPE, i);
-    Serial.println(i);
+    //Serial.println(i);
     delay(120);
-  }
+  }*/
   analogWrite(PIN_POMPE, 255);
   while((duree < 30000) && !assezDeau){
     delay(2000);
@@ -311,14 +314,11 @@ void arrosage(){
   
   // stop pompe
   Serial.println("Arret pompe");
-  Serial.print(F(";arrosage=0;"));
-  /*for(byte i = 255; i > 0; i -=10){
-    analogWrite(PIN_POMPE, i);
-    Serial.println(i);
-    delay(50);
-  } */
   analogWrite(PIN_POMPE, 0);
   digitalWrite(PINLED, LOW); // LED
+  delay(1000); // pour les courbes de données
+  Serial.print(F(";arrosage=0;"));
+  
   
   if(!assezDeau) erreur = 1;
   else erreur = 0;
@@ -336,12 +336,11 @@ float getTemperature(){
   // données brutes
   //Serial.print(F(";temperatureDS="));
   //Serial.print(tempDS);
-  Serial.print(F(";temperatureDHT="));
+  /*Serial.print(F(";temperatureDHT="));
   Serial.print(tempDHT);
-  Serial.print(F(";"));
+  Serial.println(F(";"));*/
   
-  // moyenne (problème avecleDHT11 ? Il retourntoujour 19)
-  temperature = tempDS;//(tempDS + tempDHT) / 2;
+  temperature = tempDS;
   Serial.print(F(";Temperature="));
   Serial.print(temperature);
   Serial.println(F(";"));
