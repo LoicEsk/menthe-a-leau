@@ -305,7 +305,7 @@ void arrosage(){
   analogWrite(PIN_POMPE, 255);
   while((duree < 30000) && !assezDeau){
     delay(2000);
-    Serial.print(F(";arrosage=100;"));
+    //Serial.print(F(";arrosage=100;"));
     getHumiditeTerre(true);
     
     duree = millis() - debArrosage;
