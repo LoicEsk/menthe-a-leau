@@ -289,19 +289,22 @@ void arrosage(){
   
   Serial.println(F("Arrosage !"));
   Serial.print(F(";arrosage=0;"));
-  delay(1000); // pour les courbes de données
-  Serial.print(F(";arrosage=100;"));
+  //delay(1000); // pour les courbes de données
+  //Serial.print(F(";arrosage=100;"));
   
   // démarrage pompe
   digitalWrite(PIN_POMPE, HIGH);
   digitalWrite(PINLED, HIGH); // LED
   
   Serial.println("Demarrage pompe");
-  /*for(byte i = 220; i < 255; i++){
+  for(byte i = 220; i < 255; i++){
     analogWrite(PIN_POMPE, i);
     //Serial.println(i);
+    Serial.print(";arrosage=");
+    Serial.print(i / 255 * 100);
+    Serial.println(';');
     delay(120);
-  }*/
+  }
   analogWrite(PIN_POMPE, 255);
   while((duree < 30000) && !assezDeau){
     delay(2000);
