@@ -126,9 +126,9 @@ void loop(){
   int btnState = digitalRead(PIN_BTN_POMPE);
   if(btnState == HIGH){
     // mise en route de la pompe
-    Serial.print(F(";arrosage_manuel=0;"));
+    Serial.println(F(";arrosage_manuel=0;"));
     delay(1000);
-    Serial.print(F(";arrosage_manuel=100;"));
+    Serial.println(F(";arrosage_manuel=100;"));
     digitalWrite(PIN_POMPE, HIGH);
     digitalWrite(PINLED, HIGH); // LED
     while(digitalRead(PIN_BTN_POMPE)){
@@ -136,9 +136,9 @@ void loop(){
     }
     digitalWrite(PIN_POMPE, LOW);
     digitalWrite(PINLED, LOW); // LED
-    Serial.print(F(";arrosage_manuel=100;"));
+    Serial.println(F(";arrosage_manuel=100;"));
     delay(1000);
-    Serial.print(F(";arrosage_manuel=0;"));
+    Serial.println(F(";arrosage_manuel=0;"));
     // mise à jour des données
     //updateDatas();
   }
@@ -288,25 +288,19 @@ void arrosage(){
   boolean assezDeau = false;
   
   Serial.println(F("Arrosage !"));
-<<<<<<< HEAD
-  Serial.println(F(";arrosage=0;"));
-  delay(1000); // pour les courbes de données
-  Serial.print(F(";arrosage=100;"));
-=======
   Serial.print(F(";arrosage=0;"));
   //delay(1000); // pour les courbes de données
   //Serial.print(F(";arrosage=100;"));
->>>>>>> e0389e20dd89918591fc5417f35ab26b59fa15d6
   
   // démarrage pompe
   digitalWrite(PIN_POMPE, HIGH);
   digitalWrite(PINLED, HIGH); // LED
   
-  Serial.println("Demarrage pompe");
+  Serial.println(F("Demarrage pompe"));
   for(byte i = 220; i < 255; i++){
     analogWrite(PIN_POMPE, i);
     //Serial.println(i);
-    Serial.print(";arrosage=");
+    Serial.print(F(";arrosage="));
     Serial.print(i / 255 * 100);
     Serial.println(';');
     delay(120);
