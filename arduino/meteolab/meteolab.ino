@@ -288,7 +288,7 @@ void arrosage(){
   boolean assezDeau = false;
   
   Serial.println(F("Arrosage !"));
-  Serial.print(F(";arrosage=0;"));
+  Serial.println(F(";arrosage=0;"));
   delay(1000); // pour les courbes de données
   Serial.print(F(";arrosage=100;"));
   
@@ -316,8 +316,9 @@ void arrosage(){
   Serial.println("Arret pompe");
   analogWrite(PIN_POMPE, 0);
   digitalWrite(PINLED, LOW); // LED
+  Serial.println(F(";arrosage=100;"));
   delay(1000); // pour les courbes de données
-  Serial.print(F(";arrosage=0;"));
+  Serial.println(F(";arrosage=0;"));
   
   
   if(!assezDeau) erreur = 1;
