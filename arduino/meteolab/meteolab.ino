@@ -299,7 +299,7 @@ void arrosage(){
   float valArrosage = 0;
   
   Serial.println(F("Demarrage pompe"));
-  for(byte i = 220; i < 255; i++){
+  for(byte i = 220; i < 256; i++){
     analogWrite(PIN_POMPE, i);
     //Serial.println(i);
     valArrosage = i / 2.55;
@@ -308,7 +308,7 @@ void arrosage(){
     Serial.println(';');
     delay(120);
   }
-  analogWrite(PIN_POMPE, 255);
+  //analogWrite(PIN_POMPE, 255);
   while((duree < 30000) && !assezDeau){
     delay(2000);
     //Serial.print(F(";arrosage=100;"));
