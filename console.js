@@ -5,7 +5,7 @@
 
 	docs : https://www.npmjs.org/package/serialport
   
-  version : 1.2
+  version : 1.3
 
 */
 

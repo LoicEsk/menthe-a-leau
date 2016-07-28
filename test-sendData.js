@@ -11,16 +11,17 @@ var fs = require('fs');
 function PostCode() {
   // Build the post string from an object
   var post_data = querystring.stringify({
-    'action': 'menthe_setData',
-	'donnee' : 'humidit',
-	'valeur' : 50
+   'action': 'datalizer_setData',
+	 'donnee' : 'test',
+	 'valeur' : 50
   });
+  console.log('Requete: \n--------------\n' + post_data);
 
   // An object of options to indicate where to post to
   var post_options = {
       host: 'localhost',
       port: '80',
-      path: '/wp-admin/admin-ajax.php',
+      path: '/home/wp-admin/admin-ajax.php',
       method: 'POST',
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -32,7 +33,7 @@ function PostCode() {
   var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
+          console.log('Response: \n--------------\n' + chunk);
       });
   });
 
