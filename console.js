@@ -16,11 +16,11 @@ var fs = require('fs');
 var config = require("./config.js");
 
 var serialport = require("serialport");
-var SerialPort = serialport.SerialPort; // localize object constructor 
-var serial = new SerialPort(config.get('serialID'), {
+//var SerialPort = serialport.SerialPort; // localize object constructor 
+var serial = new serialport(config.get('serialID'), {
   baudrate: config.get('baudrate'),
   parser: serialport.parsers.readline("\n") // parser de fin de lignes
-}, false);
+});
 
 
 var querystring = require('querystring');
