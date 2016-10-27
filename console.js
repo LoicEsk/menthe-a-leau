@@ -201,7 +201,7 @@ function PostData(donnee, valeur, dateStr) {
 
   // An object of options to indicate where to post to
   var post_options = {
-      host: 'localhost',
+      host: 'wordpress.dev',
       port: '80',
       path: config.get('urlPost'),
       method: 'POST',
@@ -210,6 +210,8 @@ function PostData(donnee, valeur, dateStr) {
           'Content-Length': post_data.length
       }
   };
+
+  console.log("Envoi de la requette POST sur %s%s", post_options.host, post_options.path);
 
   // Set up the request
   var post_req = http.request(post_options, function(res) {
